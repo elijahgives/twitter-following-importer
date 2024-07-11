@@ -6,6 +6,8 @@ from twitter.scraper import Scraper
 
 load_dotenv()
 
+screen_name = input("[?] Which user do you want to import following? (username): ")
+
 cookies = {
     "auth_token": os.getenv("AUTH_TOKEN"),
     "ct0": os.getenv("CT0")
@@ -14,7 +16,7 @@ cookies = {
 account = Account(cookies=cookies)
 scraper = Scraper(cookies=cookies)
 
-user = scraper.users(["cvdite"])[0]
+user = scraper.users([screen_name])[0]
 user_id = int(user["data"]["user"]["result"]["rest_id"])
 
 following = scraper.following([user_id])
@@ -29,5 +31,5 @@ for follow in following:
 
 for user in reversed(all_following):
     account.follow(int(user["rest_id"]))
-    print(f"[!] Followed {user['screen_name']}")
+    print(f"[!] Followed {user['legacy']['screen_name']}")
     time.sleep(1)
